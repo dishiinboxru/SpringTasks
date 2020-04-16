@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--  this allows you to resolve properties placeholders and use value tag in beans declarations  -->
+    <context:property-placeholder location="classpath:application.properties"/>
+
+    <!-- this is just a peace of data managed by spring and available by its id-->
+    <util:set id="alex">
+        <value>+79601232233</value>
+    </util:set>
+    <util:set id="test">
+    <value>+123</value>
+    </util:set>
+    <util:set id="test2">
+        <value>+333</value>
+        <value>555</value>
+        <value>8888</value>
+    </util:set>
+    <util:set id="billy">
+        <value>+79213215566</value>
+        <value>+79213215567</value>
+        <value>+79213215568</value>
+    </util:set>
+    <util:map id="defaultData" map-class="java.util.HashMap">
+        <entry key="Alex" value-ref="alex"/>
+        <entry key="Billy" value-ref="billy"/>
+        <entry key="Crag" value-ref="test2"/>
+        <entry key="Mikew" value-ref="test"/>
+    </util:map>
+
+    <!--  this is beans declaration  -->
+    <!-- constructor level injection -->
+    <bean name="inMemoryRepository" class="com.phonebook.spring.InMemoryRepositoryIml">
+        <constructor-arg ref="defaultData"/>
+    </bean>
+    <!-- autowiring byType -->
+    <bean name="phoneBook" class="com.phonebook.spring.PhoneBook" autowire="byType">
+         <property name="repository" ref="inMemoryRepository"/>
+    </bean>
+    <!-- properties injection -->
+    <bean name="phoneBookFormatter" class="com.phonebook.spring.PhoneBookFormatter">
+        <property name="lowerCaseNames" value="${lowerCaseNames}"/>
+        <property name="columnsSeparator" value="${columnsSeparator:\t}"/>
+    </bean>
+</beans>

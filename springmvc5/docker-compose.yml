@@ -1,0 +1,21 @@
+version: "3"
+services:
+  vikta-mysql:
+    image: mysql:5.7
+    container_name: 'mysql-customer'
+    hostname: 'mysql-customer'
+    ports:
+      - '3306:3306'
+    # Set mysql environments
+    environment:
+      MYSQL_ROOT_PASSWORD: 'secret'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'pass'
+      MYSQL_DATABASE: 'test'
+    volumes:
+      - vikta-mysql-data-volume:/var/lib/mysql
+      - ./customerdb.sql:/docker-entrypoint-initdb.d/customerdb.sql
+
+volumes:
+  vikta-mysql-data-volume:
+
